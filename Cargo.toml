@@ -3,5 +3,5 @@ resolver = "3"
 package.version = "0.1.0"
 members = [
     "rustscan", 
-    "wasm"
+    "rustscan-dylib"
 ]

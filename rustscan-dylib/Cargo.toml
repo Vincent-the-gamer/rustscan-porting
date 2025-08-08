@@ -1,0 +1,15 @@
+
+[package]
+name = "rustscan-dylib"
+edition = "2024"
+version.workspace = true
+
+[lib]
+name = "rustscan"
+crate-type = ["cdylib"]
+
+[dependencies]
+rustscan = { path = "../rustscan" }
+async-std = { version = "1.13", features = ["attributes"] }
+serde_json = "1.0"
+

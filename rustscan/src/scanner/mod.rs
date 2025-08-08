@@ -70,6 +70,14 @@ impl Scanner {
     /// If you want to run RustScan normally, this is the entry point used
     /// Returns all open ports as `Vec<u16>`
     pub async fn run(&self) -> Vec<SocketAddr> {
+        self.run_with_callback(|_| {}).await
+    }
+
+    /// 支持实时回调的扫描
+    pub async fn run_with_callback<F>(&self, mut cb: F) -> Vec<SocketAddr>
+    where
+        F: FnMut(u16) + Send + 'static,
+    {
         let ports: Vec<u16> = self
             .port_strategy
             .order()
@@ -103,7 +111,10 @@ impl Scanner {
             }
 
             match result {
-                Ok(socket) => open_sockets.push(socket),
+                Ok(socket) => {
+                    cb(socket.port());
+                    open_sockets.push(socket)
+                }
                 Err(e) => {
                     let error_string = e.to_string();
                     if errors.len() < self.ips.len() * 1000 {
@@ -316,7 +327,7 @@ mod tests {
     #[test]
     fn scanner_runs() {
         // Makes sure the program still runs and doesn't panic
-        let addrs = vec!["127.0.0.1".parse::<IpAddr>().unwrap()];
+        let addrs = vec!["192.168.1.132".parse::<IpAddr>().unwrap()];
         let range = PortRange {
             start: 1,
             end: 1_000,
