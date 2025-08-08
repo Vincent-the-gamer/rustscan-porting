@@ -1687,7 +1687,6 @@ version = "0.1.0"
 dependencies = [
  "async-std",
  "rustscan",
- "serde_json",
 ]
 
 [[package]]
