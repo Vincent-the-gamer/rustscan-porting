@@ -5,3 +5,8 @@ members = [
     "rustscan", 
     "rustscan-dylib"
 ]
+
+[profile.release]
+lto = true
+panic = 'abort'
+strip = true
